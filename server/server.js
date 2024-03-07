@@ -6,17 +6,18 @@ const axios = require('axios')
 
 require('dotenv').config()
 
-const port = 8080
-const baseURL = 'http://127.0.0.1'
+const port = process.env.PORT || 8080
+const auth0Domain = process.env.AUTH0_DOMAIN
+const auth0ApiDomain = process.env.AUTH0_API_DOMAIN
 
 const jwtCheck = auth({
-	audience: `${baseURL}:${port}/`,
-	issuerBaseURL: 'https://dev-ze6km2c7fqtpnwsy.us.auth0.com/',
+	audience: `${process.env.BASE_URL}:${port}/`,
+	issuerBaseURL: auth0Domain,
 	tokenSigningAlg: 'RS256',
 })
 
 const corsOptions = {
-	origin: `${baseURL}:5173`,
+	origin: process.env.CLIENT_URL,
 }
 
 app.use(cors(corsOptions))
@@ -31,31 +32,28 @@ app.get('/authorized', function (req, res) {
 	res.json({ uid })
 })
 
-app.patch('/user/password', async function (req, res) {
-	const { sub: uid } = req.auth.payload
-	const { password } = req.body
+app.patch('/current_user/password', async function (req, res) {
+	const { sub } = req.auth.payload
+	const { newPassword } = req.body
 
-	const authHeader = `Bearer ${process.env.MGMT_API_TOKEN}`
+	const url = auth0ApiDomain + '/users/' + sub
+	const data = { password: newPassword }
+	const config = {
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: 'Bearer ' + process.env.AUTH0_MGMT_API_TOKEN,
+		},
+	}
 
 	axios
-		.patch(
-			`https://dev-ze6km2c7fqtpnwsy.us.auth0.com/api/v2/users/${uid}`,
-			{ password },
-			{
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
-					Authorization: authHeader,
-				},
-				data: JSON.stringify({ password }),
-			}
-		)
+		.patch(url, data, config)
 		.then(response => {
 			return res.json(response.data)
 		})
 		.catch(err => {
-			const { statusCode, message } = err.response.data
-			return res.status(statusCode).json(message)
+			const { statusCode } = err.response.data
+			return res.status(statusCode).json(err.response.data)
 		})
 })
 
