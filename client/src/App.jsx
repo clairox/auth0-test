@@ -6,10 +6,6 @@ function App() {
 	const { user, isLoading, isAuthenticated, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0()
 
 	useEffect(() => {
-		console.log('user:', user?.nickname || 'none')
-	}, [user, getAccessTokenSilently])
-
-	useEffect(() => {
 		const getAuthorized = async () => {
 			try {
 				const accessToken = await getAccessTokenSilently({
