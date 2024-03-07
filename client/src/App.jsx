@@ -3,8 +3,7 @@ import './App.css'
 import { useAuth0 } from '@auth0/auth0-react'
 
 function App() {
-	const { user, isLoading, isAuthenticated, loginWithRedirect, logout, getAccessTokenSilently } =
-		useAuth0()
+	const { user, isLoading, isAuthenticated, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0()
 
 	useEffect(() => {
 		console.log('user:', user?.nickname || 'none')
@@ -33,7 +32,7 @@ function App() {
 		}
 
 		getAuthorized()
-	}, [isAuthenticated])
+	}, [isAuthenticated, getAccessTokenSilently])
 
 	if (isLoading) {
 		return <div>Loading...</div>
