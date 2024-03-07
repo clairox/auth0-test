@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { useAuth0 } from '@auth0/auth0-react'
+import axios from './lib/axiosInstance'
 
 function App() {
 	const { user, isLoading, isAuthenticated, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0()
@@ -15,14 +16,14 @@ function App() {
 					},
 				})
 
-				const response = await fetch('http://127.0.0.1:8080/authorized', {
+				const config = {
 					headers: {
 						Authorization: `Bearer ${accessToken}`,
 					},
-				})
+				}
 
-				const data = await response.json()
-				setUserId(data.uid)
+				const response = await axios.get('/authorized', config)
+				setUserId(response.data.uid)
 			} catch (err) {
 				console.log(err.message)
 			}
