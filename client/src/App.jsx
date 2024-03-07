@@ -4,7 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 
 function App() {
 	const { user, isLoading, isAuthenticated, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0()
-	const [uid, setUid] = useState('')
+	const [userId, setUserId] = useState('')
 
 	useEffect(() => {
 		const getAuthorized = async () => {
@@ -22,7 +22,7 @@ function App() {
 				})
 
 				const data = await response.json()
-				setUid(data.uid)
+				setUserId(data.uid)
 			} catch (err) {
 				console.log(err.message)
 			}
@@ -39,7 +39,7 @@ function App() {
 		return (
 			<div>
 				<p>Logged in as {user.nickname}</p>
-				<p>Returned user ID: {Boolean(uid) && uid}</p>
+				<p>Returned user ID: {Boolean(userId) && userId}</p>
 				<button onClick={() => logout()}>Logout</button>
 			</div>
 		)
