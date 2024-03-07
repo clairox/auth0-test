@@ -6,13 +6,13 @@ import { Auth0Provider } from '@auth0/auth0-react'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<Auth0Provider
-		domain="dev-ze6km2c7fqtpnwsy.us.auth0.com"
-		clientId="Wgfh3njxufmUaW9coCCbtV4vU9ycRWUs"
+		domain={import.meta.env.VITE_AUTH0_DOMAIN}
+		clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
 		useRefreshTokens
 		cacheLocation="localstorage"
 		authorizationParams={{
 			redirect_uri: window.location.origin,
-			audience: 'http://127.0.0.1:8080/',
+			audience: import.meta.env.VITE_AUTH0_AUDIENCE,
 		}}
 	>
 		<React.StrictMode>
