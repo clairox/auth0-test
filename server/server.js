@@ -24,9 +24,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use(jwtCheck)
 
 app.get('/authorized', function (req, res) {
-	const { sub: userId } = req.auth.payload
-	console.log(userId)
-	res.json({ message: 'Secured Resource' })
+	const { sub: uid } = req.auth.payload
+	res.json({ uid })
 })
 
 app.listen(port)

@@ -25,7 +25,7 @@ function App() {
 				})
 
 				const data = await response.json()
-				console.log(data.message)
+				console.log('Returned user ID:', data.uid)
 			} catch (err) {
 				console.log(err.message)
 			}
