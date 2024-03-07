@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { useAuth0 } from '@auth0/auth0-react'
 
 function App() {
 	const { user, isLoading, isAuthenticated, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0()
+	const [uid, setUid] = useState('')
 
 	useEffect(() => {
 		const getAuthorized = async () => {
@@ -21,7 +22,7 @@ function App() {
 				})
 
 				const data = await response.json()
-				console.log('Returned user ID:', data.uid)
+				setUid(data.uid)
 			} catch (err) {
 				console.log(err.message)
 			}
@@ -38,6 +39,7 @@ function App() {
 		return (
 			<div>
 				<p>Logged in as {user.nickname}</p>
+				<p>Returned user ID: {Boolean(uid) && uid}</p>
 				<button onClick={() => logout()}>Logout</button>
 			</div>
 		)
